@@ -59,29 +59,68 @@
   <audio data-key="76" src="sounds/tink.wav"></audio>
 
   <script>
-    window.addEventListener("keydown", (e) => {
-      const audio = document.querySelector(`audio[data-key="${e.keyCode}"]`);
+  // 把功能拆成函式的寫法
+    // 1. 播放聲音
+    function playSound(e) {
+      const audio = document.querySelector(
+        `audio[data-key="${e.keyCode}"]`
+      );
 
-      const key = document.querySelector(`.key[data-key="${e.keyCode}"]`);
+      const key = document.querySelector(
+        `.key[data-key="${e.keyCode}"]`
+      );
 
-      if (!audio) return;
-
-      audio.currentTime = 0;
-
-      audio.play();
+      if (!audio || !key) return;
 
       key.classList.add("playing");
-    });
 
+      audio.currentTime = 0;
+      audio.play();
+    }
+
+    // 2. 移除動畫
+    function removeTransition(e) {
+      if (e.propertyName !== "transform") return;
+
+      e.currentTarget.classList.remove("playing");
+    }
+
+    // 3. 取得所有按鍵
     const keys = document.querySelectorAll(".key");
 
-      keys.forEach((key) => {
-        key.addEventListener("transitionend", (event) => {
-          if (event.propertyName !== "transform") return;
+    // 4. 每個按鍵監聽動畫結束
+    keys.forEach((key) => {
+      key.addEventListener("transitionend", removeTransition);
+    });
 
-          key.classList.remove("playing");
-        });
-      });
+    // 5. 監聽鍵盤按下
+    window.addEventListener("keydown", playSound);
+
+
+
+    // window.addEventListener("keydown", (e) => {
+    //   const audio = document.querySelector(`audio[data-key="${e.keyCode}"]`);
+
+    //   const key = document.querySelector(`.key[data-key="${e.keyCode}"]`);
+
+    //   if (!audio) return;
+
+    //   audio.currentTime = 0;
+
+    //   audio.play();
+
+    //   key.classList.add("playing");
+    // });
+
+    // const keys = document.querySelectorAll(".key");
+
+    //   keys.forEach((key) => {
+    //     key.addEventListener("transitionend", (event) => {
+    //       if (event.propertyName !== "transform") return;
+
+    //       key.classList.remove("playing");
+    //     });
+    //   });
   </script>
 
 
